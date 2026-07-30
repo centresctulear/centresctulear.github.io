@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil — CSC Père Berthier Tuléar</title>
+  <meta name="description" content="Centre Socio-Culturel à Madagascar dédié à la solidarité, au développement humain et au soutien des communautés locales depuis 2018.">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    :root {
+      --forest: #1a3a2a;
+      --leaf: #2d6a4f;
+      --mint: #52b788;
+      --sand: #f8f3e8;
+      --clay: #c47c2b;
+      --terracotta: #d4572a;
+      --charcoal: #1c1c1c;
+      --mist: #eaf4ee;
+      --white: #ffffff;
+      --text-muted: #6b7c74;
+      --border: rgba(45, 106, 79, 0.15);
+      --transition: 0.3s ease;
+      --shadow-sm: 0 4px 24px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 16px 48px rgba(45, 106, 79, 0.12);
+      --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+    *{
+          box-sizing:border-box;
+    }
+
+    html,body{
+          width:100%;
+          overflow-x:hidden;
+    }
+
+    .container{
+          width:100%;
+          max-width:1200px;
+          margin:auto;
+          padding:0 20px;
+    }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--sand);
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+
+    /* LOADER */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--sand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--border);
+      border-top-color: var(--leaf);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+   
+    /* REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .rd1 {
+      transition-delay: .1s;
+    }
+    .rd2 {
+      transition-delay: .2s;
+    }
+    .rd3 {
+      transition-delay: .3s;
+    }
+    .rd4 {
+      transition-delay: .4s;
+    }
+    .rd5 {
+      transition-delay: .5s;
+    }
+    .rd6 {
+      transition-delay: .6s;
+    }
+ 
+    /* PAGE TRANSITION */
+    #app {
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+    #app.fading {
+      opacity: 0;
+    }
+
+    /* NAVBAR */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 5%;
+      background: rgba(248, 243, 232, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow var(--transition);
+    }
+    nav.scrolled {
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-image {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      flex-shrink: 0;
+    }
+    .nav-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+    .nav-brand-text {
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--forest);
+      line-height: 1.15;
+    }
+    .nav-brand-text span {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.08em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: color var(--transition);
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--leaf);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--leaf);
+    }
+    .nav-donate {
+      background: var(--terracotta) !important;
+      color: var(--white) !important;
+      padding: 0.55rem 1.4rem !important;
+      border-radius: 100px !important;
+      font-weight: 600 !important;
+    }
+    .nav-donate::after {
+      display: none !important;
+    }
+    .nav-donate:hover {
+      background: var(--clay) !important;
+      transform: translateY(-1px);
+    }
+    /* --- STYLE DU BOUTON BURGER (PAR DÉFAUT CACHÉ SUR PC) --- */
+.hamburger {
+  display: none; /* Caché sur ordinateur */
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  z-index: 1000; /* Reste bien au-dessus du menu */
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--charcoal);
+  transition: all 0.3s ease; /* Animation fluide */
+  border-radius: 2px;
+}
+
+/* --- ANIMATION : TRANSFORMATION EN "X" QUAND IL A LA CLASSE .open --- */
+/* La barre du haut tourne à 45 degrés */
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+/* La barre du milieu disparaît */
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+/* La barre du bas tourne à -45 degrés */
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+    .hamburger.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      border-radius: 100px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+    }
+    .btn-primary {
+      background: var(--mint);
+      color: var(--forest);
+    }
+    .btn-primary:hover {
+      background: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(82, 183, 136, 0.4);
+    }
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .btn-forest {
+      background: var(--forest);
+      color: var(--white);
+    }
+    .btn-forest:hover {
+      background: var(--leaf);
+      transform: translateY(-2px);
+    }
+
+    /* SECTION */
+    .section {
+      padding: 6rem 5%;
+    }
+    .section-alt {
+      background: var(--mist);
+    }
+    .section-dark {
+      background: var(--forest);
+    }
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-bottom: 0.8rem;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--mint);
+      border-radius: 2px;
+    }
+    .section-dark .section-eyebrow {
+      color: var(--mint);
+    }
+    .section-h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--forest);
+    }
+    .section-h2 em {
+      font-style: italic;
+      font-weight: 300;
+    }
+    .section-dark .section-h2 {
+      color: var(--white);
+    }
+    .section-desc {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      max-width: 580px;
+      margin-top: 0.8rem;
+    }
+
+    /* HERO */
+    .hero {
+      min-height:100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+      height:auto;
+    }
+    .hero-left {
+      background: var(--forest);
+      display: flex;
+      flex-direction: column;
+      padding: 9rem 5% 7rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: var(--leaf);
+      opacity: 0.15;
+    }
+    .hero-left::after {
+      content: '';
+      position: absolute;
+      top: 100px;
+      left: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: var(--mint);
+      opacity: 0.1;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(82, 183, 136, 0.2);
+      color: var(--mint);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      border: 1px solid rgba(82, 183, 136, 0.3);
+      margin-bottom: 1.8rem;
+      width: fit-content;
+    }
+    .hero-tag-dot {
+      font-size: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.4rem, 4vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.08;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--mint);
+      font-weight: 300;
+    }
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.65);
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--mint);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+   .hero-right{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+    background:linear-gradient(160deg,#2d6a4f 0%,#1a3a2a 100%);
+}
+    .hero-img-mosaic {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 3px;
+      opacity: 0.6;
+    }
+    .hero-img-mosaic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .hero-img-mosaic img:hover {
+      transform: scale(1.05);
+      z-index: 2;
+    }
+    .mc1 {
+      background: linear-gradient(135deg, #3d8b6f, #1a5240);
+    }
+    .mc2 {
+      background: linear-gradient(135deg, #c47c2b, #8a5010);
+    }
+    .mc3 {
+      background: linear-gradient(135deg, #1a5240, #0d2a1e);
+    }
+    .mc4 {
+      background: linear-gradient(135deg, #52b788, #2d6a4f);
+    }
+    .hero-overlay-card {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(248, 243, 232, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 1.5rem 2rem;
+      border-radius: 16px;
+      width: 78%;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .oc-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--mint), var(--leaf));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .oc-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--forest);
+      margin-bottom: 0.25rem;
+    }
+    .oc-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .oc-badge {
+      margin-left: auto;
+      background: var(--terracotta);
+      color: var(--white);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.35rem 0.8rem;
+      border-radius: 100px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* INTRO STRIP */
+    .intro-strip {
+      background: var(--mist);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .intro-strip p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--forest);
+      max-width: 700px;
+    }
+    .intro-strip p strong {
+      font-weight: 600;
+      color: var(--leaf);
+    }
+    .strip-watermark {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--forest);
+      opacity: 0.06;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .big-quote {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--leaf);
+      line-height: 1.6;
+      padding-left: 1.5rem;
+      border-left: 3px solid var(--mint);
+      margin-bottom: 2rem;
+    }
+    .about-body {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .founder-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      margin-top: 2rem;
+      border: 1px solid var(--border);
+    }
+    .founder-card img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .founder-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--forest);
+    }
+    .founder-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-card-main {
+      background: linear-gradient(135deg, var(--forest) 0%, #0e2018 100%);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-card-main::before {
+      content: '✝';
+      position: absolute;
+      top: -20px;
+      right: 20px;
+      font-size: 8rem;
+      color: var(--white);
+      opacity: 0.04;
+    }
+    .acm-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: 0.5rem;
+    }
+    .acm-date {
+      font-family: 'Fraunces', serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+    .acm-date span {
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: 300;
+      display: block;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.3rem;
+    }
+    .acm-sep {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 1.5rem 0;
+    }
+    .acm-text {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .acm-text strong {
+      color: var(--mint);
+    }
+    .about-mini-card {
+      position: absolute;
+      bottom: -1.5rem;
+      right: -1.5rem;
+      background: var(--mint);
+      border-radius: 14px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 12px 32px rgba(82, 183, 136, 0.4);
+      text-align: center;
+    }
+    .amc-num {
+      font-family: 'Fraunces', serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--forest);
+      line-height: 1;
+    }
+    .amc-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(26, 58, 42, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* SERVICES */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      transition: transform 0.35s, box-shadow 0.35s;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--leaf), var(--mint));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+    }
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+    .service-num {
+      font-family: 'Fraunces', serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 1rem;
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+    }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .service-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--forest);
+      margin-bottom: 0.6rem;
+      padding-right: 3rem;
+    }
+    .service-title em {
+      font-style: italic;
+      color: var(--leaf);
+      font-family: 'Fraunces', serif;
+    }
+    .service-desc {
+      font-size: 0.86rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* MVV */
+    .mvv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .mvv-panel {
+      padding: 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .mvv-panel:nth-child(1) {
+      background: var(--forest);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .mvv-panel:nth-child(2) {
+      background: var(--leaf);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .mvv-panel:nth-child(3) {
+      background: var(--mist);
+      grid-column: span 2;
+      border-top: 1px solid var(--border);
+    }
+    .mvv-panel::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      opacity: 0.08;
+      background: var(--mint);
+    }
+    .mvv-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .mvv-label {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.8rem;
+    }
+    .mvv-panel:nth-child(3) .mvv-label {
+      color: var(--forest);
+    }
+    .mvv-text {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.65);
+    }
+    .mvv-panel:nth-child(3) .mvv-text {
+      color: var(--text-muted);
+    }
+    .valeurs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .valeur-chip {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .valeur-chip:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    }
+    .valeur-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .valeur-name {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--forest);
+    }
+
+    /* APPEL */
+    .appel-section {
+      background: linear-gradient(135deg, var(--terracotta) 0%, var(--clay) 100%);
+      padding: 6rem 5%;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4rem;
+      align-items: center;
+    }
+    .appel-section .section-eyebrow {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .appel-section .section-eyebrow::before {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    .appel-section .section-h2 {
+      color: var(--white);
+    }
+    .appel-desc {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.75);
+      max-width: 540px;
+      margin-top: 0.8rem;
+    }
+    .appel-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 2.5rem;
+      min-width: 280px;
+      text-align: center;
+    }
+    .appel-amounts {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .amount-btn {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.6rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: 'Outfit', sans-serif;
+    }
+    .amount-btn:hover,
+    .amount-btn.active {
+      background: var(--white);
+      color: var(--terracotta);
+      border-color: var(--white);
+    }
+    .appel-btn {
+      width: 100%;
+      background: var(--white);
+      color: var(--terracotta);
+      border: none;
+      padding: 1rem;
+      border-radius: 100px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: 'Outfit', sans-serif;
+    }
+    .appel-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    .appel-secure {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.8rem;
+    }
+
+    /* PAGE HERO (inner pages) */
+    .page-hero {
+      background: var(--forest);
+      padding: 10rem 5% 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: var(--leaf);
+      opacity: 0.15;
+    }
+    .page-hero-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.08;
+      margin-bottom: 1rem;
+    }
+    .page-hero-title em {
+      font-style: italic;
+      color: var(--mint);
+      font-weight: 300;
+    }
+    .page-hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.65);
+      max-width: 560px;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a {
+      color: var(--mint);
+      cursor: pointer;
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .breadcrumb a:hover {
+      color: var(--white);
+    }
+    .breadcrumb span {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .contact-info-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--mist);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .contact-info-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-bottom: 0.3rem;
+    }
+    .contact-info-val {
+      font-size: 0.95rem;
+      color: var(--forest);
+      font-weight: 500;
+    }
+    .contact-form {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--forest);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      background: var(--sand);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--mint);
+      box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.15);
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .success-box {
+      text-align: center;
+      padding: 3rem 0;
+      display: none;
+    }
+    .success-box .s-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .success-box h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      color: var(--forest);
+      margin-bottom: 0.75rem;
+    }
+    .success-box p {
+      color: var(--text-muted);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--charcoal);
+      color: rgba(255, 255, 255, 0.6);
+      padding: 4rem 5% 2rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .footer-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .footer-logo span {
+      color: var(--mint);
+      font-style: italic;
+    }
+    .footer-tagline {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .social-links {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background var(--transition);
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .social-btn:hover {
+      background: var(--leaf);
+      color: var(--white);
+    }
+    .footer-col h5 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .footer-col a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.45);
+      transition: color var(--transition);
+      cursor: pointer;
+    }
+    .footer-col a:hover {
+      color: var(--mint);
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-bottom p {
+      font-size: 0.8rem;
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-bottom-links a {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.3);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-bottom-links a:hover {
+      color: var(--mint);
+    }
+    .footer-credit {
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.2);
+      margin-top: 1rem;
+    }
+.slider-container{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    overflow:hidden;
+    position:relative;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+.slider-track img{
+  width:min(350px, 80vw);
+  height:auto;
+  object-fit:cover;
+  margin-right:15px;
+  border-radius:15px;
+  flex-shrink:0;
+  justify-content: center;
+}
+.slider-track{
+  display:flex;
+  width:max-content;
+}
+/* Pause au survol */
+.slider-container:hover .slider-track{
+  animation-play-state:paused;
+}
+.slider-track {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    animation: none;
+}
+
+.home-image img{
+  width:100%;
+max-width:1200px;
+
+height:auto;
+
+margin:auto;
+    object-fit:cover;
+    display:block;
+}
+.actions-slider img{
+    width:min(350px, 80vw);
+    height:auto;
+    object-fit:cover;
+    border-radius:15px;
+    flex-shrink:0;
+}
+.actions-slider{
+    display:flex;
+    width:max-content;
+    gap:0;
+    animation:slideRight 70s linear infinite;
+}
+@keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.3;
+      }
+    }
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-16px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+    /* 1. Masquer la liste des liens par défaut sur mobile */
+    .nav-links {
+        display: none; /* Cache le menu horizontal */
+        flex-direction: column;
+        position: absolute;
+        top: 70px; /* À ajuster selon la hauteur de votre navbar */
+        left: 0;
+        width: 100%;
+        background-color: #F4F3EA; /* Couleur de fond du menu mobile */
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 2. Afficher le menu uniquement quand il a la classe .active (gérée par le JS) */
+    .nav-links.active {
+        display: flex; 
+    }
+
+    /* 3. Forcer le bouton hamburger à apparaître sur mobile */
+    .hamburger {
+        display: flex !important; /* Force l'affichage du bouton burger/croix */
+    }
+}
+   @media(max-width:768px){
+
+    .hero{
+        display:flex;
+        flex-direction:column;
+        min-height:auto;
+        height:auto;
+    }
+    .hero-left{
+        width:100%;
+        padding:90px 20px 40px;
+    }
+
+    .hero-right{
+        width:100%;
+        min-height:350px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+
+    .hero-desc{
+        font-size:.95rem;
+    }
+
+    .hero-stats{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .slider-track img,
+    .actions-slider img{
+        width:min(350px,80vw);
+        height:auto;
+        aspect-ratio:4/5;
+        object-fit:cover;
+    }
+
+    .about-grid,
+    .contact-grid,
+    .services-grid,
+    .footer-top{
+        grid-template-columns:1fr !important;
+    }
+
+    .nav-image{
+        width:45px;
+        height:45px;
+    }
+
+    .section{
+        padding:60px 20px;
+    }
+}
+
+    @media(max-width:480px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero-stats {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+      .footer-top {
+        grid-template-columns: 1fr;
+      }
+      .hero-actions {
+        flex-direction: column;
+      }
+      .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .valeurs-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+      .page-hero {
+        padding: 8rem 5% 3rem;
+      }
+      .contact-form {
+        padding: 1.5rem;
+      }
+      .mvv-panel {
+        padding: 2rem;
+      }
+      .about-card-main {
+        padding: 1.5rem;
+      }
+      .acm-date {
+        font-size: 2rem;
+      }
+    }
+/* Animation gauche → droite */
+@keyframes slideRight{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(-50%);
+    }
+}
+/* ===== RESPONSIVE TABLETTE ===== */
+@media screen and (max-width: 1024px){
+
+.hero{
+    grid-template-columns: 1fr;
+    height: auto;
+}
+
+.hero-left,
+.hero-right{
+    width: 100%;
+}
+
+.hero-right{
+    min-height: 400px;
+}
+
+.hero-overlay-card{
+    width: 90%;
+}
+
+.nav-brand-text{
+    font-size: 0.9rem;
+}
+}
+
+/* ===== TELEPHONE ===== */
+@media screen and (max-width: 768px){
+body{
+    overflow-x: hidden;
+}
+
+.hero-desc{
+    font-size: 0.95rem;
+}
+
+.hero-stats{
+    flex-direction: column;
+    gap: 15px;
+}
+
+.about-grid,
+.contact-grid,
+.services-grid,
+.footer-top{
+    grid-template-columns: 1fr !important;
+}
+
+.section{
+    padding: 60px 20px;
+}
+
+.contact-form{
+    padding: 20px;
+}
+
+.hero-overlay-card{
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    margin-top: 20px;
+}
+h1{
+    font-size:2rem !important;
+}
+
+h2{
+    font-size:1.6rem !important;
+}
+
+p{
+    font-size:0.95rem;
+}
+}
+.nav-image{
+    width:70px;
+    height:70px;
+    flex-shrink:0;
+}
+
+@media (max-width:768px){
+
+.nav-image{
+        width:45px;
+        height:45px;
+    }
+.hero-content{
+    width:100% !important;
+    max-width:100% !important;
+}
+}
+/* ===== PETITS SMARTPHONES ===== */
+@media screen and (max-width: 480px){
+
+.hero h1{
+    font-size: 1.6rem;
+}
+
+.section-h2{
+    font-size: 1.8rem;
+}
+
+.btn{
+    width: 100%;
+    justify-content: center;
+}
+.hero-right{
+    min-height: 250px;
+}
+}
+
+/* Images fluides */
+img{
+    max-width:100%;
+    height:auto;
+}
+
+/* Vidéos fluides */
+video,
+iframe{
+max-width: 100%;
+height: auto;
+}
+@media (max-width:480px){
+
+.hero p{
+    font-size:0.95rem;
+}
+}
+@keyframes slideImages{
+  0%{
+    transform:translateX(-50%);
+  }
+  100%{
+    transform:translateX(0);
+  }
+}
+/* ===== CORRECTION RESPONSIVE PROPRE ===== */
+
+@media (max-width: 1024px) {
+  nav {
+    padding: 0.8rem 5%;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--sand);
+    padding: 1.2rem 5%;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .hero-right {
+    min-height: 420px;
+  }
+
+  .about-grid,
+  .contact-grid,
+  .services-grid,
+  .footer-top {
+    grid-template-columns: 1fr;
+  }
+
+  .appel-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  #app {
+    padding-top: 70px !important;
+  }
+
+  .hero-left {
+    padding: 4rem 20px 3rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero-overlay-card {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    width: calc(100% - 40px);
+    margin: 20px auto;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mvv-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mvv-panel:nth-child(3) {
+    grid-column: auto;
+  }
+
+  .valeurs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-bottom-links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-brand-text {
+    font-size: 0.78rem;
+  }
+
+  .nav-brand-text span {
+    font-size: 0.58rem;
+  }
+
+  .nav-image {
+    width: 42px;
+    height: 42px;
+  }
+
+  .hero h1 {
+    font-size: 1.65rem;
+  }
+
+  .section-h2 {
+    font-size: 1.55rem;
+  }
+
+  .section {
+    padding: 50px 16px;
+  }
+
+  .contact-form {
+    padding: 1.2rem;
+  }
+
+  .valeurs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-slider img {
+    width: 80vw;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader" role="status" aria-label="Chargement">
+    <div class="loader-spinner"></div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar" role="navigation" aria-label="Navigation principale">
+    <a class="nav-brand" onclick="navigate('home')" aria-label="Accueil">
+      <div class="nav-image">
+        <img src="./image/logo.jpg" alt="Logo CSC" style="height:70px;width:auto;">
+      </div>
+      <div class="nav-brand-text">
+        CSC Père Berthier
+        <span>Centre Socio-Culturel — Tuléar</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks" role="menubar">
+      <li role="none"><a onclick="navigate('home')" data-page="home" role="menuitem">Accueil</a></li>
+      <li role="none"><a onclick="navigate('about')" data-page="about" role="menuitem">Qui sommes-nous</a></li>
+      <li role="none"><a onclick="navigate('values')" data-page="values" role="menuitem">Nos Valeurs</a></li>
+      <li role="none"><a onclick="navigate('actions')" data-page="actions" role="menuitem">Nos Actions</a></li>
+      <li role="none"><a onclick="navigate('contact')" data-page="contact" role="menuitem">Contact</a></li>
+      <li role="none"><a class="nav-donate" onclick="navigate('contact')" role="menuitem">Nous soutenir</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- CONTENU PRINCIPAL -->
+  <div id="app" style="padding-top:65px; min-height:100vh; display:flex; flex-direction:column;"></div>
+
+  <!-- TEMPLATE FOOTER -->
+  <template id="footer-tpl">
+    <footer>
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo">CSC Père <span>Berthier</span></div>
+          <p class="footer-tagline">Centre Socio-Culturel à Madagascar — dédié à la solidarité, au développement humain et au soutien des communautés locales depuis 2018.</p>
+          <div class="social-links">
+            <a href="#" class="social-btn" aria-label="Facebook">f</a>
+            <a href="#" class="social-btn" aria-label="Twitter">𝕏</a>
+            <a href="#" class="social-btn" aria-label="Instagram">📷</a>
+            <a href="#" class="social-btn" aria-label="YouTube">▶</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h5>Navigation</h5>
+          <ul>
+            <li><a onclick="navigate('home')">Accueil</a></li>
+            <li><a onclick="navigate('about')">Qui sommes-nous</a></li>
+            <li><a onclick="navigate('values')">Nos Valeurs</a></li>
+            <li><a onclick="navigate('actions')">Nos Actions</a></li>
+            <li><a onclick="navigate('contact')">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Nos Programmes</h5>
+          <ul>
+            <li><a onclick="navigate('actions')">Éducation & Alphabétisation</a></li>
+            <li><a onclick="navigate('actions')">Animation Culturelle</a></li>
+            <li><a onclick="navigate('actions')">Assistance Sociale</a></li>
+            <li><a onclick="navigate('actions')">Formation Qualifiante</a></li>
+            <li><a onclick="navigate('actions')">Animation Spirituelle</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="#" onclick="navigate('contact')">📍 Tuléar, Madagascar</a></li>
+            <li><a href="mailto:contact@cscberthier.mg">✉️ contact@cscberthier.mg</a></li>
+            <li><a href="#" onclick="navigate('contact')">📞 Nous appeler</a></li>
+            <li><a onclick="navigate('contact')">Devenir bénévole</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 CSC Père Berthier Tuléar | Centre Socio-Culturel à Madagascar</p>
+        <div class="footer-bottom-links">
+          <a href="#" onclick="navigate('home')">Mentions légales</a>
+          <a href="#" onclick="navigate('home')">Politique de confidentialité</a>
+          <a href="#" onclick="navigate('home')">Transparence financière</a>
+        </div>
+      </div>
+      <p class="footer-credit">Conçu par Voni Randria</p>
+    </footer>
+  </template>
+
+  <script>
+    // ─── PAGES ───
+    const pages = {
+      home: `
+        <section class="hero">
+          <div class="hero-left">
+            <div class="hero-tag"><span class="hero-tag-dot">●</span> Centre Socio-Culturel à Madagascar</div>
+            <h1>Forger une communauté où la jeunesse est <em>protégée, épanouie</em> et actrice de son destin.</h1>
+            <p class="hero-desc">Au service des populations de Tuléar et de ses environs, nous accompagnons les familles les plus vulnérables avec dignité, solidarité et espérance.</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" onclick="navigate('contact')">❤️ Nous soutenir</button>
+              <button class="btn btn-ghost" onclick="navigate('about')">Qui sommes-nous →</button>
+            </div>
+            <div class="hero-stats">
+              <div><div class="stat-num">2018</div><div class="stat-label">Fondée le 10 fév.</div></div>
+              <div><div class="stat-num">6</div><div class="stat-label">Programmes actifs</div></div>
+              <div><div class="stat-num">100%</div><div class="stat-label">À but non lucratif</div></div>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="slider-container">
+                    <div class="home-image">
+                        <img src="image/centre.jpg" alt="">
+                    </div>
+                </div>
+
+              <div class="hero-overlay-card">
+                <div class="oc-icon">✨</div>
+                <div>
+                  <div class="oc-title">Association active depuis 2018</div>
+                  <div class="oc-sub">
+                    Solidarité, développement humain et soutien des communautés locales
+                  </div>
+                </div>
+                <div class="oc-badge">Tuléar</div>
+              </div>
+            </div>
+        </section>
+
+        <div class="intro-strip">
+          <p>Depuis 2018, la <strong>CSC Père Berthier Tuléar</strong> est une association à but non lucratif dédiée à la solidarité, au développement humain et au soutien des communautés locales, avec une attention particulière portée aux familles les plus vulnérables.</p>
+          <div class="strip-watermark">CSC</div>
+        </div>
+
+        <section class="section">
+          <div class="about-grid">
+            <div class="reveal">
+              <div style="margin-bottom:2rem">
+                <div class="section-eyebrow">À notre sujet</div>
+                <h2 class="section-h2">Qui <em>sommes-nous</em> ?</h2>
+              </div>
+              <p class="big-quote">Inspirée par l'esprit et les valeurs du Père Jean Baptiste Berthier MS, l'association place la dignité humaine, la solidarité et l'espérance au cœur de ses actions.</p>
+              <p class="about-body">La CSC Père Berthier Tuléar, fondée le 10 février 2018, est une association à but non lucratif dédiée à la solidarité, au développement humain et au soutien des communautés locales, avec une attention particulière portée aux familles les plus vulnérables.</p>
+              <p class="about-body">Elle s'engage à accompagner les familles afin de favoriser leur autonomie, leur épanouissement et leur participation active au développement local.</p>
+              <div class="founder-card">
+                <img src="image/logo.jpg" alt="Père Jean Baptiste Berthier" loading="lazy">
+                <div>
+                  <div class="founder-name">Père Jean Baptiste Berthier MS</div>
+                  <div class="founder-sub">Fondateur des Missionnaires de la Sainte Famille — source d'inspiration de notre association</div>
+                </div>
+              </div>
+              <br>
+              <button class="btn btn-forest" onclick="navigate('about')">En savoir plus →</button>
+            </div>
+            <div class="about-visual reveal rd2" style="padding-bottom:2rem">
+              <div class="about-card-main">
+                <div class="acm-label">Fondée officiellement le</div>
+                <div class="acm-date">10 Fév. 2018<span>Tuléar, Madagascar</span></div>
+                <div class="acm-sep"></div>
+                <p class="acm-text">Association <strong>à but non lucratif</strong> dédiée à la solidarité et au développement humain, portée par les valeurs de la <strong>Sainte Famille</strong>.</p>
+              </div>
+              <div class="about-mini-card">
+                <div class="amc-num">6</div>
+                <div class="amc-label">Programmes</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `,
+
+      about: `
+        <div class="page-hero">
+          <div class="breadcrumb"><a onclick="navigate('home')">Accueil</a><span>/</span><span>Qui sommes-nous</span></div>
+          <h1 class="page-hero-title">Qui <em>sommes-nous</em> ?</h1>
+          <p class="page-hero-desc">Une association fondée sur la dignité humaine, la solidarité et l'espérance, au service des communautés de Tuléar.</p>
+        </div>
+        <section class="section">
+          <div class="about-grid">
+            <div class="reveal">
+              <p class="big-quote">Depuis notre création en 2018, nous agissons main dans la main avec les forces vives locales pour redonner une perspective d'avenir aux plus démunis.</p>
+              <p class="about-body">Le Centre Socio-Culturel Père Berthier œuvre activement dans les quartiers défavorisés de Tuléar. Face aux défis socio-économiques majeurs de la région, notre structure offre un repère stable et bienveillant pour les familles.</p>
+              <p class="about-body">Portés par une équipe d'animateurs et d'assistants sociaux dévoués, nos efforts s'articulent autour du développement global de l'individu : intellectuel, manuel et spirituel.</p>
+              <div class="founder-card">
+                <img src="image/logo.jpg" alt="Père Jean Baptiste Berthier" loading="lazy">
+                <div>
+                  <div class="founder-name">Père Jean Baptiste Berthier MS</div>
+                  <div class="founder-sub">Fondateur des Missionnaires de la Sainte Famille — source d'inspiration de notre association</div>
+                </div>
+              </div>
+            </div>
+            <div class="about-visual reveal rd2">
+              <div class="about-card-main" style="background: linear-gradient(135deg, var(--leaf) 0%, var(--forest) 100%)">
+                <div class="acm-label">Notre ancrage historique</div>
+                <p class="acm-text" style="color:var(--white); font-size:1.05rem; line-height:1.6">"Aller vers les plus pauvres, fortifier les familles et bâtir un avenir ancré dans la confiance réciproque."</p>
+              </div>
+              <div class="about-mini-card" style="bottom: -0.5rem; right: 0.5rem;">
+                <div class="amc-num">2018</div>
+                <div class="amc-label">Année de fondation</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `,
+
+      values: `
+        <div class="page-hero">
+          <div class="breadcrumb"><a onclick="navigate('home')">Accueil</a><span>/</span><span>Nos Valeurs</span></div>
+          <h1 class="page-hero-title">Nos <em>Valeurs</em></h1>
+          <p class="page-hero-desc">Les piliers éthiques et spirituels qui guident chacun de nos projets au quotidien.</p>
+        </div>
+        <section class="section">
+          <div class="mvv-grid reveal">
+            <div class="mvv-panel">
+              <div class="mvv-icon">🤝</div>
+              <div class="mvv-label">La Solidarité</div>
+              <p class="mvv-text">Un engagement inconditionnel aux côtés des personnes traversant des situations de grande précarité, sans distinction aucune.</p>
+            </div>
+            <div class="mvv-panel">
+              <div class="mvv-icon">🌱</div>
+              <div class="mvv-label">La Dignité Humaine</div>
+              <p class="mvv-text">Permettre à chacun de retrouver confiance en ses capacités, d'accéder à l'autonomie financière et de s'épanouir librement.</p>
+            </div>
+            <div class="mvv-panel">
+              <div class="mvv-icon">✨</div>
+              <div class="mvv-label">L'Espérance</div>
+              <p class="mvv-text">Inspirés par la Sainte Famille et l'héritage du Père Jean Baptiste Berthier, nous croyons au potentiel transformateur caché au cœur de chaque foyer et de chaque jeune.</p>
+            </div>
+          </div>
+          <div class="valeurs-grid">
+            <div class="valeur-chip reveal rd1"><div class="valeur-icon">❤️</div><div class="valeur-name">Bienveillance</div></div>
+            <div class="valeur-chip reveal rd2"><div class="valeur-icon">🎯</div><div class="valeur-name">Responsabilité</div></div>
+            <div class="valeur-chip reveal rd3"><div class="valeur-icon">☀️</div><div class="valeur-name">Partage</div></div>
+            <div class="valeur-chip reveal rd4"><div class="valeur-icon">🛡️</div><div class="valeur-name">Protection</div></div>
+          </div>
+        </section>
+      `,
+
+      actions: `
+        <div class="page-hero">
+          <div class="breadcrumb"><a onclick="navigate('home')">Accueil</a><span>/</span><span>Nos Actions</span></div>
+          <h1 class="page-hero-title">Nos <em>Actions & Programmes</em></h1>
+          <p class="page-hero-desc">Découvrez l'impact de nos 6 programmes opérationnels de soutien et de formation à Tuléar.</p>
+        </div>
+        <section class="section">
+          <div class="services-grid" style="margin-top:0">
+            <div class="service-card reveal rd1">
+              <div class="service-icon">📚</div>
+              <div class="service-title">Éducation & Alphabétisation</div>
+              <p class="service-desc">Cours de soutien pour enfants déscolarisés et alphabétisation des adultes pour faciliter l'insertion sociale et l'autonomie administrative.</p>
+            </div>
+            <div class="service-card reveal rd2">
+              <div class="service-icon">🎭</div>
+              <div class="service-title">Animation Culturelle</div>
+              <p class="service-desc">Ateliers d'expression théâtrale, de musique, de danse et célébrations locales renforçant les liens communautaires et le vivre-ensemble.</p>
+            </div>
+            <div class="service-card reveal rd3">
+              <div class="service-icon">🤝</div>
+              <div class="service-title">Assistance Sociale</div>
+              <p class="service-desc">Distribution de fournitures d'urgence, de denrées de première nécessité, et aide logistique aux familles frappées par les crises.</p>
+            </div>
+            <div class="service-card reveal rd4">
+              <div class="service-icon">💬</div>
+              <div class="service-title">Écoute & Accompagnement</div>
+              <p class="service-desc">Permanences de conseil psychologique et de médiation familiale pour aider à surmonter les traumatismes et les conflits du quotidien.</p>
+            </div>
+            <div class="service-card reveal rd5">
+              <div class="service-icon">🧺</div>
+              <div class="service-title">Formation Qualifiante</div>
+              <p class="service-desc">Formations concrètes comme la vannerie, la couture ou les bases de l'entrepreneuriat afin d'offrir des sources stables de revenus aux femmes.</p>
+            </div>
+            <div class="service-card reveal rd6">
+              <div class="service-icon">🙏</div>
+              <div class="service-title">Animation Spirituelle</div>
+              <p class="service-desc">Temps de recueillement fraternels basés sur le respect, la paix et l'entraide communautaire, s'inspirant des Missionnaires de la Sainte Famille.</p>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="slider-container">
+                  <div class="actions-slider">
+                      <img src="image/écoute.jpg" alt="">
+                      <img src="image/écoute_1.jpg" alt="">
+                      <img src="image/formation.jpg" alt="">
+                      <img src="image/formation_1.jpg" alt="">
+                      <img src="image/formation_2.jpg" alt="">
+                      <img src="image/formation_3.jpg" alt="">
+                      <img src="image/formation_4.jpg" alt="">
+                      <img src="image/formation_5.jpg" alt="">
+                      <img src="image/formation_6.jpg" alt="">
+                      <img src="image/spirituelle.jpg" alt="">
+                      <img src="image/spirituelle_1.jpg" alt="">
+                      <img src="image/spirituelle_2.jpg" alt="">
+                      <img src="image/spirituelle_3.jpg" alt="">
+                      <img src="image/spirituelle_4.jpg" alt="">
+                      <img src="image/spirituelle_5.jpg" alt="">
+                      <img src="image/spirituelle_6.jpg" alt="">
+                      <img src="image/spirituelle_7.jpg" alt="">
+                      <img src="image/spirituelle_8.jpg" alt="">
+                      <img src="image/education.jpg" alt="">
+                      <img src="image/education_1.jpg" alt="">
+                      <img src="image/education_2.jpg" alt="">
+                      <img src="image/education_3.jpg" alt="">
+                      <img src="image/education_4.jpg" alt="">
+                      <img src="image/education_5.jpg" alt="">
+                      <img src="image/education_6.jpg" alt="">
+                      <img src="image/education_7.jpg" alt="">
+                      <img src="image/education_8.jpg" alt="">
+                      <img src="image/education_9.jpg" alt="">
+                      <img src="image/education_10.jpg" alt="">
+                      <img src="image/social_1.jpg" alt="">
+                      <img src="image/social_2.jpg" alt="">
+                      <img src="image/social_3.jpg" alt="">
+                      <img src="image/social_4.jpg" alt="">
+                      <img src="image/social_5.jpg" alt="">
+                      <img src="image/social_7.jpg" alt="">
+                      <img src="image/social_8.jpg" alt="">
+                  </div>
+                  </div>
+              </div>
+
+              <div class="hero-overlay-card">
+                <div class="oc-icon">✨</div>
+                <div>
+                  <div class="oc-title">Association active depuis 2018</div>
+                  <div class="oc-sub">
+                    Solidarité, développement humain et soutien des communautés locales
+                  </div>
+                </div>
+                <div class="oc-badge">Tuléar</div>
+              </div>
+            </div>
+        </section>
+      `,
+
+      contact: `
+        <div class="page-hero">
+          <div class="breadcrumb"><a onclick="navigate('home')">Accueil</a><span>/</span><span>Contact</span></div>
+          <h1 class="page-hero-title">Contactez-<em>nous</em></h1>
+          <p class="page-hero-desc">Une question, un projet de bénévolat ou une envie de faire un don ? Écrivez-nous dès aujourd'hui.</p>
+        </div>
+        <section class="section">
+          <div class="contact-grid">
+            <div class="reveal">
+              <div style="margin-bottom:2.5rem">
+                <div class="section-eyebrow">Coordonnées</div>
+                <h2 class="section-h2">Restons en <em>Lien</em></h2>
+              </div>
+              <div class="contact-info-item">
+                <div class="contact-info-icon">📍</div>
+                <div>
+                  <div class="contact-info-label">Adresse</div>
+                  <div class="contact-info-val">Centre Socio-Culturel Père Berthier, Tuléar, Madagascar</div>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <div class="contact-info-icon">✉️</div>
+                <div>
+                  <div class="contact-info-label">E-mail</div>
+                  <div class="contact-info-val"><a href="mailto:contact@cscberthier.mg" style="color:var(--leaf);text-decoration:none;">contact@cscberthier.mg</a></div>
+                </div>
+              </div>
+              <div class="contact-info-item">
+                <div class="contact-info-icon">📞</div>
+                <div>
+                  <div class="contact-info-label">Téléphone</div>
+                  <div class="contact-info-val">+261 37 89 288 29</div>
+                </div>
+              </div>
+              <div style="margin-top:2rem;padding:1.5rem;background:var(--mist);border-radius:12px;">
+                <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.7;">
+                  <strong style="color:var(--forest);">📍 Nous trouver :</strong> Le centre est situé au cœur de Tuléar, à proximité du marché central. N'hésitez pas à nous rendre visite !
+                </p>
+              </div>
+            </div>
+            <div class="contact-form reveal rd2">
+              <form id="cForm" novalidate>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="fullName">Nom complet</label>
+                    <input type="text" id="fullName" name="from_name" required placeholder="Votre nom" autocomplete="name">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Adresse E-mail</label>
+                    <input type="email" id="email" name="from_email" required placeholder="votre@email.com" autocomplete="email">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="subject">Sujet</label>
+                  <select id="subject" name="subject" required>
+                    <option value="">Sélectionnez un sujet</option>
+                    <option value="Demande d'information">Demande d'information</option>
+                    <option value="Devenir Bénévole">Devenir Bénévole</option>
+                    <option value="Faire un Don">Faire un Don / Soutien</option>
+                    <option value="Partenariat">Partenariat</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="message">Message</label>
+                  <textarea id="message" name="message" required placeholder="Votre message ici..."></textarea>
+                </div>
+
+                <input type="hidden" name="to_name" value="CSC Père Berthier Tuléar">
+                <input type="hidden" name="reply_to" id="replyTo">
+
+                <button type="submit" id="submitBtn" class="btn btn-forest" style="width:100%; justify-content:center">
+                  ✉️ Envoyer mon message
+                </button>
+
+                <p id="formStatus" style="display:none;margin-top:1rem;font-size:0.9rem;line-height:1.5;"></p>
+              </form>
+
+              <div class="success-box" id="successBox">
+                <div class="s-icon">✅</div>
+                <h3>Message envoyé</h3>
+                <p>Merci pour votre message. Nous vous répondrons dès que possible.</p>
+                <br>
+                <button class="btn btn-forest" onclick="resetContactForm()">Envoyer un autre message</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      `
+    };
+
+    // ─── EMAILJS CONFIGURATION ───
+    // 1) Créez un compte sur https://www.emailjs.com/
+    // 2) Créez un Email Service
+    // 3) Créez un Email Template avec ces variables :
+    //    {{from_name}}, {{from_email}}, {{reply_to}}, {{subject}}, {{message}}, {{to_name}}
+    // 4) Remplacez les 3 valeurs ci-dessous.
+    const EMAILJS_PUBLIC_KEY = "moflt-3aJiNMVok9G";
+    const EMAILJS_SERVICE_ID = "service_tei73ml";
+    const EMAILJS_TEMPLATE_ID = "template_oa3g3ad";
+
+    if (window.emailjs) {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
+
+    // ─── NAVIGATION SPA SIMPLE ───
+    const app = document.getElementById('app');
+    const footerTemplate = document.getElementById('footer-tpl');
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.getElementById('hamburger');
+    const navbar = document.getElementById('navbar');
+
+    function navigate(page) {
+      const targetPage = pages[page] ? page : 'home';
+
+      app.classList.add('fading');
+
+      setTimeout(() => {
+        app.innerHTML = pages[targetPage] + footerTemplate.innerHTML;
+        app.classList.remove('fading');
+
+        document.querySelectorAll('[data-page]').forEach(link => {
+          link.classList.toggle('active', link.dataset.page === targetPage);
+        });
+
+        navLinks.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        initReveal();
+        initContactForm();
+      }, 120);
+    }
+
+    // ─── MENU MOBILE ───
+    hamburger.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // ─── NAVBAR SHADOW ───
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // ─── ANIMATION REVEAL ───
+    function initReveal() {
+      const items = document.querySelectorAll('.reveal');
+
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(item => item.classList.add('visible'));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      items.forEach(item => observer.observe(item));
+    }
+
+    // ─── BOUTONS DE DON ───
+    function selectAmt(button) {
+      document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+    }
+
+    // ─── FORMULAIRE CONTACT + EMAILJS ───
+    function initContactForm() {
+      const form = document.getElementById('cForm');
+      if (!form) return;
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const status = document.getElementById('formStatus');
+        const submitBtn = document.getElementById('submitBtn');
+        const successBox = document.getElementById('successBox');
+        const replyTo = document.getElementById('replyTo');
+        const emailInput = document.getElementById('email');
+
+        status.style.display = 'none';
+        status.textContent = '';
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        if (!window.emailjs) {
+          showFormStatus("Le script EmailJS n'est pas chargé. Vérifiez votre connexion Internet.", "error");
+          return;
+        }
+
+        if (
+          EMAILJS_PUBLIC_KEY === "VOTRE_PUBLIC_KEY" ||
+          EMAILJS_SERVICE_ID === "VOTRE_SERVICE_ID" ||
+          EMAILJS_TEMPLATE_ID === "VOTRE_TEMPLATE_ID"
+        ) {
+          showFormStatus("EmailJS n'est pas encore configuré. Remplacez PUBLIC_KEY, SERVICE_ID et TEMPLATE_ID dans le script.", "error");
+          return;
+        }
+
+        replyTo.value = emailInput.value;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Envoi en cours...";
+
+        try {
+          await emailjs.sendForm("service_5hi3xjr", EMAILJS_TEMPLATE_ID, form);
+
+          form.style.display = 'none';
+          successBox.style.display = 'block';
+          form.reset();
+        } catch (error) {
+          console.error("Erreur EmailJS complète :", error);
+          console.error("Status :", error.status);
+          console.error("Text :", error.text);
+
+          showFormStatus(
+            "Erreur EmailJS : " + (error.text || "Vérifiez votre template EmailJS."),
+            "error"
+          );
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "✉️ Envoyer mon message";
+        }
+      });
+    }
+
+    function showFormStatus(message, type) {
+      const status = document.getElementById('formStatus');
+      if (!status) return;
+
+      status.style.display = 'block';
+      status.textContent = message;
+      status.style.color = type === 'error' ? '#d4572a' : '#2d6a4f';
+      status.style.background = type === 'error' ? 'rgba(212,87,42,0.08)' : 'rgba(82,183,136,0.10)';
+      status.style.border = type === 'error' ? '1px solid rgba(212,87,42,0.25)' : '1px solid rgba(82,183,136,0.25)';
+      status.style.borderRadius = '10px';
+      status.style.padding = '0.85rem 1rem';
+    }
+
+    function resetContactForm() {
+      const form = document.getElementById('cForm');
+      const successBox = document.getElementById('successBox');
+
+      if (form) form.style.display = 'block';
+      if (successBox) successBox.style.display = 'none';
+    }
+
+    // ─── LOADER + PAGE INITIALE ───
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader');
+      setTimeout(() => loader.classList.add('hidden'), 350);
+    });
+
+    navigate('home');
+  </script>
+</body>
+</html>
